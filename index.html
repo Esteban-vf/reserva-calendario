@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reserva tu Experiencia · Visit Panamá</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f4f7fb;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 48px;
+    }
+
+    /* HEADER */
+    .header {
+      width: 100%;
+      max-width: 480px;
+      margin-bottom: 20px;
+    }
+    .header img { max-height: 48px; width: auto; }
+
+    /* HERO */
+    .hero {
+      width: 100%;
+      max-width: 480px;
+      background: linear-gradient(135deg, #1A5FAB 0%, #0d3d7a 100%);
+      border-radius: 16px;
+      padding: 22px 24px;
+      color: #fff;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 24px rgba(26,95,171,0.28);
+    }
+    .hero h1 { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+    .hero p  { font-size: 13px; opacity: 0.85; line-height: 1.5; }
+
+    /* CARD */
+    .card {
+      width: 100%;
+      max-width: 480px;
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(26,95,171,0.09);
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #6b7a8d;
+      margin-bottom: 16px;
+    }
+
+    /* FORM */
+    .form-group { margin-bottom: 16px; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #1a2a3a;
+      margin-bottom: 6px;
+    }
+
+    label span { color: #e53935; }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #dde4ef;
+      border-radius: 10px;
+      font-size: 14px;
+      color: #1a2a3a;
+      background: #f8fafc;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #1A5FAB;
+      background: #fff;
+    }
+
+    input.error, select.error { border-color: #e53935; }
+
+    .error-msg {
+      font-size: 11px;
+      color: #e53935;
+      margin-top: 4px;
+      display: none;
+    }
+
+    textarea { resize: none; height: 80px; }
+
+    .row { display: flex; gap: 12px; }
+    .row .form-group { flex: 1; }
+
+    /* BUTTON */
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: #1A5FAB;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      max-width: 480px;
+    }
+    .btn-primary:hover { background: #0d3d7a; }
+
+    .btn-calendar {
+      width: 100%;
+      padding: 14px;
+      background: #fff;
+      color: #1A5FAB;
+      border: 2px solid #1A5FAB;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .btn-calendar:hover { background: #eef4fb; }
+
+    /* CONFIRMATION */
+    #pantalla-confirmacion { display: none; width: 100%; max-width: 480px; flex-direction: column; align-items: center; }
+
+    .confirm-hero {
+      width: 100%;
+      background: linear-gradient(135deg, #1A5FAB 0%, #0d3d7a 100%);
+      border-radius: 16px;
+      padding: 28px 24px;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 24px rgba(26,95,171,0.28);
+    }
+    .confirm-check { font-size: 48px; margin-bottom: 12px; }
+    .confirm-hero h2 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+    .confirm-hero p  { font-size: 13px; opacity: 0.85; }
+
+    .resumen-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .resumen-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f4f8;
+      font-size: 14px;
+    }
+    .resumen-row:last-child { border-bottom: none; }
+    .resumen-label { color: #6b7a8d; font-weight: 500; }
+    .resumen-value { color: #1a2a3a; font-weight: 700; text-align: right; max-width: 60%; }
+
+    .numero-reserva {
+      display: inline-block;
+      background: #eef4fb;
+      color: #1A5FAB;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-top: 8px;
+      letter-spacing: 1px;
+    }
+
+    .notice-info {
+      width: 100%;
+      background: #eef4fb;
+      border-left: 4px solid #1A5FAB;
+      border-radius: 0 10px 10px 0;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: #2c4a6b;
+      line-height: 1.5;
+    }
+
+    /* HIDDEN */
+    #pantalla-form { width: 100%; max-width: 480px; display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+    .footer {
+      margin-top: 32px;
+      font-size: 12px;
+      color: #a0aab5;
+      text-align: center;
+    }
+
+    /* MODAL VIDEO */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .modal-box {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: #1A5FAB;
+      color: #fff;
+    }
+
+    .modal-header span { font-size: 14px; font-weight: 700; }
+
+    .modal-close {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: #fff;
+      font-size: 18px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .modal-video {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+    }
+
+    .modal-video iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <img src="https://now.silice.si/temp/PromTour/Imagenes/Logo%20PromTour.png" alt="PromTour Panamá" />
+  </div>
+
+  <!-- ===== PANTALLA FORMULARIO ===== -->
+  <div id="pantalla-form">
+
+    <div class="hero">
+      <h1>📋 Reserva tu experiencia</h1>
+      <p>Completa los datos y asegura tu lugar. Recibirás una confirmación y podrás agregar la fecha a tu calendario.</p>
+    </div>
+
+    <!-- EXPERIENCIA -->
+    <div class="card" style="margin-bottom:16px; width:100%;">
+      <div class="card-title">Experiencia</div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label for="experiencia">Selecciona la experiencia <span>*</span></label>
+        <select id="experiencia">
+          <option value="">-- Elige una opción --</option>
+          <option value="Tour Cafe Bocas|105|Tours y experiencias · Bocas del Toro">Tour Cafe Bocas — $105.00</option>
+          <option value="Hotel Bahia Panama|90|Hoteles · Ciudad de Panamá">Hotel Bahia Panama — $90.00 / noche</option>
+          <option value="Spa Termal Chiriquí|30|Wellness · Chiriquí">Spa Termal Chiriquí — $30.00</option>
+          <option value="Experiencia Náutica Bocas|150|Turismo náutico · Bocas del Toro">Experiencia Náutica Bocas — $150.00</option>
+          <option value="Tour Casco Antiguo|120|Tours · Ciudad de Panamá">Tour Casco Antiguo — $120.00</option>
+          <option value="Spa & Wellness Boquete|100|Wellness · Chiriquí">Spa & Wellness Boquete — $100.00</option>
+        </select>
+        <div class="error-msg" id="err-experiencia">Selecciona una experiencia</div>
+      </div>
+    </div>
+
+    <!-- DATOS PERSONALES -->
+    <div class="card" style="margin-bottom:16px; width:100%;">
+      <div class="card-title">Datos personales</div>
+      <div class="form-group">
+        <label for="nombre">Nombre completo <span>*</span></label>
+        <input type="text" id="nombre" placeholder="Ej: María García" />
+        <div class="error-msg" id="err-nombre">Ingresa tu nombre completo</div>
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <label for="email">Correo electrónico <span>*</span></label>
+          <input type="email" id="email" placeholder="correo@email.com" />
+          <div class="error-msg" id="err-email">Ingresa un correo válido</div>
+        </div>
+        <div class="form-group">
+          <label for="telefono">Teléfono <span>*</span></label>
+          <input type="tel" id="telefono" placeholder="+507 6000-0000" />
+          <div class="error-msg" id="err-telefono">Ingresa tu teléfono</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DETALLES DE RESERVA -->
+    <div class="card" style="margin-bottom:20px; width:100%;">
+      <div class="card-title">Detalles de la reserva</div>
+      <div class="row">
+        <div class="form-group">
+          <label for="fecha">Fecha <span>*</span></label>
+          <input type="date" id="fecha" />
+          <div class="error-msg" id="err-fecha">Selecciona una fecha</div>
+        </div>
+        <div class="form-group">
+          <label for="personas">Personas <span>*</span></label>
+          <select id="personas">
+            <option value="">--</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5+">5+</option>
+          </select>
+          <div class="error-msg" id="err-personas">Selecciona cantidad</div>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label for="notas">Notas adicionales</label>
+        <textarea id="notas" placeholder="Alergias, solicitudes especiales, preferencias..."></textarea>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="validarReserva()">Confirmar reserva</button>
+
+  </div>
+
+  <!-- ===== PANTALLA CONFIRMACIÓN ===== -->
+  <div id="pantalla-confirmacion">
+
+    <div class="confirm-hero">
+      <div class="confirm-check">✅</div>
+      <h2>¡Reserva confirmada!</h2>
+      <p>Tu experiencia ha sido reservada exitosamente.</p>
+      <div class="numero-reserva" id="numero-reserva">PT-2026-0001</div>
+    </div>
+
+    <div class="card" style="width:100%; margin-bottom:16px;">
+      <div class="card-title">Resumen de tu reserva</div>
+      <div class="resumen-list">
+        <div class="resumen-row">
+          <span class="resumen-label">Experiencia</span>
+          <span class="resumen-value" id="res-experiencia">—</span>
+        </div>
+        <div class="resumen-row">
+          <span class="resumen-label">Nombre</span>
+          <span class="resumen-value" id="res-nombre">—</span>
+        </div>
+        <div class="resumen-row">
+          <span class="resumen-label">Correo</span>
+          <span class="resumen-value" id="res-email">—</span>
+        </div>
+        <div class="resumen-row">
+          <span class="resumen-label">Fecha</span>
+          <span class="resumen-value" id="res-fecha">—</span>
+        </div>
+        <div class="resumen-row">
+          <span class="resumen-label">Personas</span>
+          <span class="resumen-value" id="res-personas">—</span>
+        </div>
+        <div class="resumen-row">
+          <span class="resumen-label">Total</span>
+          <span class="resumen-value" id="res-total" style="color:#1A5FAB; font-size:16px;">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="width:100%; margin-bottom:16px;">
+      <div class="card-title">Agrega la fecha a tu calendario</div>
+      <p style="font-size:13px; color:#6b7a8d; margin-bottom:12px;">No olvides tu experiencia. Agrégala directamente a tu calendario favorito.</p>
+      <a id="btn-google-cal" href="#" target="_blank" class="btn-calendar">
+        📅 Google Calendar
+      </a>
+    </div>
+
+    <div class="notice-info">
+      📧 Recibirás una confirmación en tu correo con todos los detalles de tu reserva.
+    </div>
+
+  </div>
+
+  <div class="footer">Visit Panamá · PROMTUR 2026</div>
+
+  <!-- MODAL VIDEO -->
+  <div class="modal-overlay" id="modal-video" onclick="cerrarModal(event)">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span>📅 Cómo agregar al calendario</span>
+        <button class="modal-close" onclick="cerrarModalBtn()">✕</button>
+      </div>
+      <div class="modal-video">
+        <video id="video-iframe" controls playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;">
+          <source src="https://now.silice.si/temp/PromTour/Videos/SILICE%20_%20PAU_Google%20Calendar.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Fecha mínima = hoy
+    const hoy = new Date().toISOString().split('T')[0];
+    document.getElementById('fecha').setAttribute('min', hoy);
+
+    function mostrarError(id, errId, mostrar) {
+      const el  = document.getElementById(id);
+      const err = document.getElementById(errId);
+      el.classList.toggle('error', mostrar);
+      err.style.display = mostrar ? 'block' : 'none';
+    }
+
+    function validarReserva() {
+      let valido = true;
+
+      const experiencia = document.getElementById('experiencia').value;
+      const nombre      = document.getElementById('nombre').value.trim();
+      const email       = document.getElementById('email').value.trim();
+      const telefono    = document.getElementById('telefono').value.trim();
+      const fecha       = document.getElementById('fecha').value;
+      const personas    = document.getElementById('personas').value;
+
+      if (!experiencia) { mostrarError('experiencia','err-experiencia', true);  valido = false; } else { mostrarError('experiencia','err-experiencia', false); }
+      if (nombre.length < 3) { mostrarError('nombre','err-nombre', true);       valido = false; } else { mostrarError('nombre','err-nombre', false); }
+      if (!email)        { mostrarError('email','err-email', true);             valido = false; } else { mostrarError('email','err-email', false); }
+      if (!telefono)     { mostrarError('telefono','err-telefono', true);       valido = false; } else { mostrarError('telefono','err-telefono', false); }
+      if (!fecha)        { mostrarError('fecha','err-fecha', true);             valido = false; } else { mostrarError('fecha','err-fecha', false); }
+      if (!personas)     { mostrarError('personas','err-personas', true);       valido = false; } else { mostrarError('personas','err-personas', false); }
+
+      if (!valido) return;
+
+      // Datos de la experiencia
+      const partes     = experiencia.split('|');
+      const expNombre  = partes[0] || 'Experiencia';
+      const expPrecio  = parseFloat(partes[1]) || 0;
+      const numPersonas = personas === '5+' ? 5 : parseInt(personas);
+      const total      = expPrecio * numPersonas;
+
+      // Número de reserva
+      const ref = 'PT-' + new Date().getFullYear() + '-' + (Math.floor(Math.random() * 9000) + 1000);
+      document.getElementById('numero-reserva').textContent = ref;
+
+      // Resumen
+      document.getElementById('res-experiencia').textContent = expNombre;
+      document.getElementById('res-nombre').textContent      = nombre;
+      document.getElementById('res-email').textContent       = email;
+      document.getElementById('res-personas').textContent    = personas + ' persona(s)';
+      document.getElementById('res-total').textContent       = '$' + total.toFixed(2) + ' USD';
+
+      // Fecha legible
+      const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+      const partesFecha = fecha.split('-');
+      document.getElementById('res-fecha').textContent = partesFecha[2] + ' de ' + meses[parseInt(partesFecha[1]) - 1] + ' de ' + partesFecha[0];
+
+      // Botón Google Calendar → abre modal con video
+      document.getElementById('btn-google-cal').onclick = function(e) {
+        e.preventDefault();
+        abrirModal();
+      };
+
+      // Cambiar pantalla
+      document.getElementById('pantalla-form').style.display         = 'none';
+      document.getElementById('pantalla-confirmacion').style.display = 'flex';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function abrirModal() {
+      const video = document.getElementById('video-iframe');
+      video.currentTime = 0;
+      video.play();
+      document.getElementById('modal-video').classList.add('active');
+    }
+
+    function cerrarModalBtn() {
+      const video = document.getElementById('video-iframe');
+      video.pause();
+      video.currentTime = 0;
+      document.getElementById('modal-video').classList.remove('active');
+    }
+
+    function cerrarModal(e) {
+      if (e.target === document.getElementById('modal-video')) cerrarModalBtn();
+    }
+  </script>
+
+</body>
+</html>
